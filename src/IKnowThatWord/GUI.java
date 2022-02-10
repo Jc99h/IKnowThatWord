@@ -50,7 +50,15 @@ public class GUI extends JFrame {
 
 		//Set up JComponents
 		modelIKnowThatWord.setNombre(JOptionPane.showInputDialog("Cual es tu nombre?"));
-		modelIKnowThatWord.nuevoUsuario();
+		if(modelIKnowThatWord.validarUsuario()==true)
+		{
+			JOptionPane.showMessageDialog(null, "Usuario existente");
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(null, "Usuario nuevo");
+			modelIKnowThatWord.nuevoUsuario();
+		}
 
 		headerProject = new Header("Mesa de juego I Know That Word", Color.BLACK);
 		constraints.gridx = 0;
