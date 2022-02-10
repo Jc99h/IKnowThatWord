@@ -1,12 +1,12 @@
-package KnowThatWord;
+package IKnowThatWord;
 
 import javax.swing.*;
 import java.awt.*;
 
 /**
  * This class is a kind of JLabel used to create a personalized Header for the project
- * @autor Camilo Ordoñez 1827625-2711 juan.ordonez.hurtado@correounivalle.edu.co
- * @version @version v.1.0.0 date:10/12/2021
+ * @author Camilo Ordoñez 1827625-2711 juan.ordonez.hurtado@correounivalle.edu.co
+ * @version @version v.1.0.0 date:09/02/2021
  */
 public class Header extends JLabel {
 	/**

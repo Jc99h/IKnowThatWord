@@ -1,19 +1,24 @@
-package KnowThatWord;
+package IKnowThatWord;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * This class is used for ...
- * @autor Camilo Ordoñez 1827625-2711 juan.ordonez.hurtado@correounivalle.edu.co
- * @version @version v.1.0.0 date:10/12/2021
+ * @author Camilo Ordoñez 1827625-2711 juan.ordonez.hurtado@correounivalle.edu.co
+ * @version @version v.1.0.0 date:02/09/2021
  */
 public class GUI extends JFrame {
 
+	private static final String MENSAJE_INICIO = "Ayuda";
+	private ModelIKnowThatWord modelIKnowThatWord;
 	private Header headerProject;
 	private JButton ayuda, salir, si, no;
 	private JTextArea nombrePersona, nivel, mensajes;
 	private JTextField palabras;
+	private Escucha escucha;
 
 	/**
 	 * Constructor of GUI class
@@ -40,8 +45,13 @@ public class GUI extends JFrame {
 		GridBagConstraints constraints = new GridBagConstraints();
 
 		//Create Listener Object and Control Object
+		modelIKnowThatWord = new ModelIKnowThatWord();
+		escucha = new Escucha();
 
 		//Set up JComponents
+		modelIKnowThatWord.setNombre(JOptionPane.showInputDialog("Cual es tu nombre?"));
+		modelIKnowThatWord.nuevoUsuario();
+
 		headerProject = new Header("Mesa de juego I Know That Word", Color.BLACK);
 		constraints.gridx = 0;
 		constraints.gridy = 0;
@@ -50,7 +60,7 @@ public class GUI extends JFrame {
 		this.add(headerProject, constraints);
 
 		ayuda = new JButton("  ?  ");
-		//ayuda.addActionListener(escucha);
+		ayuda.addActionListener(escucha);
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		constraints.gridwidth = 1;
@@ -60,7 +70,7 @@ public class GUI extends JFrame {
 
 		nombrePersona = new JTextArea(1, 15);
 		nombrePersona.setBorder(BorderFactory.createTitledBorder("Nombre"));
-		nombrePersona.setText("Pepe");
+		nombrePersona.setText(modelIKnowThatWord.getNombre());
 		nombrePersona.setEditable(false);
 		constraints.gridx = 1;
 		constraints.gridy = 1;
@@ -81,7 +91,7 @@ public class GUI extends JFrame {
 		this.add(nivel, constraints);
 
 		salir = new JButton("Salir");
-		//salir.addActionListener(escucha);
+		salir.addActionListener(escucha);
 		constraints.gridx = 3;
 		constraints.gridy = 1;
 		constraints.gridwidth = 1;
@@ -147,8 +157,19 @@ public class GUI extends JFrame {
 	/**
 	 * inner class that extends an Adapter Class or implements Listeners used by GUI class
 	 */
-	private class Escucha
+	private class Escucha implements ActionListener
 	{
 
+		@Override
+		public void actionPerformed(ActionEvent objectEvent) {
+			if (objectEvent.getSource() == ayuda) {
+				JOptionPane.showMessageDialog(null, MENSAJE_INICIO);
+			}
+			if (objectEvent.getSource() == salir) {
+				System.exit(0);
+			}
+			revalidate();
+			repaint();
+		}
 	}
 }
