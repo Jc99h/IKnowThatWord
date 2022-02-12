@@ -175,11 +175,12 @@ public class GUI extends JFrame {
 
                 } else {
                     palabras.setText(modelIKnowThatWord.palabrasParaRecordar.get(numPalabra));
+                    mensajes.setText(numPalabra+"");
                     revalidate();
                     repaint();
                     numPalabra++;
 
-                    if (numPalabra >= modelIKnowThatWord.palabrasParaRecordar.size() - 1) {
+                    if (numPalabra >= modelIKnowThatWord.palabrasParaRecordar.size()) {
                         timer.cancel();
                     }
                 }

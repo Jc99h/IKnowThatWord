@@ -16,17 +16,26 @@ public class FileManager {
 	private BufferedWriter output;
 
 
-	public ArrayList <String> lecturaFile()
+	public ArrayList <String> lecturaFile(String cualArchivo)
 	{
-		ArrayList <String> frases = new ArrayList <String>();
+		ArrayList <String> nombres = new ArrayList <String>();
+		ArrayList <String> palabras = new ArrayList <String>();
 
 		try
 		{
-			fileReader = new FileReader("src/IKnowThatWord/files/nombres.txt");
+			fileReader = new FileReader("src/IKnowThatWord/files/"+cualArchivo+".txt");
 			input = new BufferedReader(fileReader);
 			String line = input.readLine();
 			while(line!=null){
-				frases.add(line);
+				if(cualArchivo=="nombres")
+				{
+					nombres.add(line);
+				}
+				else
+				{
+					palabras.add(line);
+				}
+
 				line=input.readLine();
 			}
 		}
@@ -49,14 +58,18 @@ public class FileManager {
 				e.printStackTrace();
 			}
 		}
-		return frases;
+		if(cualArchivo=="nombres")
+		{
+			return nombres;
+		}
+		return palabras;
 	}
 
-	public void escribirTexto(String linea)
+	public void escribirTexto(String linea, String cualArchivo)
 	{
 		try
 		{
-			fileWriter = new FileWriter("src/IKnowThatWord/files/nombres.txt",true);
+			fileWriter = new FileWriter("src/IKnowThatWord/files/"+cualArchivo+".txt",true);
 			output = new BufferedWriter(fileWriter);
 			output.write(linea);
 			output.newLine();
