@@ -52,8 +52,8 @@ public class GUI extends JFrame {
 		modelIKnowThatWord.setNombre(JOptionPane.showInputDialog("Cual es tu nombre?"));
 		if(modelIKnowThatWord.validarUsuario()==true)
 		{
-			if(modelIKnowThatWord.getNivel()!=0) {
-				JOptionPane.showMessageDialog(null, "El usuario " + modelIKnowThatWord.getNombre() + " ya existe\n" + "y el ultimo nivel aprobado fue el " + modelIKnowThatWord.getNivel());
+			if(modelIKnowThatWord.getNivelNum()!=0) {
+				JOptionPane.showMessageDialog(null, "El usuario " + modelIKnowThatWord.getNombre() + " ya existe\n" + "y el ultimo nivel aprobado fue el " + modelIKnowThatWord.getNivelNum());
 			}
 			else
 			{
@@ -95,7 +95,7 @@ public class GUI extends JFrame {
 
 		nivel = new JTextArea(1, 15);
 		nivel.setBorder(BorderFactory.createTitledBorder("Nivel"));
-		nivel.setText(modelIKnowThatWord.getNivel()+1+"");
+		nivel.setText(modelIKnowThatWord.getNivelNum()+1+"");
 		nivel.setEditable(false);
 		constraints.gridx = 2;
 		constraints.gridy = 1;
