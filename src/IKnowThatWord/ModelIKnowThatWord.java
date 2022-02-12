@@ -1,7 +1,9 @@
 package IKnowThatWord;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * This class is used for ...
@@ -12,16 +14,40 @@ import java.util.Objects;
 
 public class ModelIKnowThatWord {
     public class Nivel {
-        public int nivel, palabrasParaRecordar, palabrasDelNivel, porcentajeAciertos;
+        public int nivel, numPalabrasParaRecordar, numPalabrasDelNivel, porcentajeAciertos;
 
         public Nivel(int nivel) {
             this.nivel = nivel;
         }
     }
 
+    public ArrayList<String> palabrasTemporales = new ArrayList<String>(Arrays.asList(
+            "hola",
+            "como",
+            "estas",
+            "yo",
+            "bien",
+            "humanidad",
+            "humano",
+            "persona",
+            "gente",
+            "rodilla",
+            "cabeza",
+            "ojo",
+            "campo",
+            "naturaleza",
+            "perro",
+            "gato",
+            "rio",
+            "playa",
+            "verdura",
+            "tomate",
+            "sandia"));
+
     private String nombre;
     private int nivelNum;
-    private ArrayList<String> listaNombres;
+    public ArrayList<String> listaNombres, palabrasParaRecordar, palabrasDelNivel;
+    private Random random;
     private FileManager fileManager;
 
     public ArrayList<Nivel> niveles;
@@ -29,6 +55,7 @@ public class ModelIKnowThatWord {
     public ModelIKnowThatWord() {
         fileManager = new FileManager();
         listaNombres = fileManager.lecturaFile();
+        random = new Random();
 
         setValoresDeNiveles();
 
@@ -73,53 +100,67 @@ public class ModelIKnowThatWord {
     }
 
     public void initNivel() {
+        palabrasParaRecordar = new ArrayList<String>();
+        palabrasDelNivel = new ArrayList<String>();
+        Nivel nivelActual = niveles.get(nivelNum);
 
+        //setea las palabras del nivel de un arraylist (por ahora palabras temporales)
+        for (int i = 0; i < nivelActual.numPalabrasDelNivel; i++) {
+            palabrasDelNivel.add(palabrasTemporales.get(random.nextInt(0, palabrasTemporales.size() - 1)));
+        }
+
+        //de las palabras del nivel que saca antes sacar las palabras a recordar
+        for (int i = 0; i < nivelActual.numPalabrasParaRecordar; i++) {
+            palabrasParaRecordar.add(palabrasDelNivel.get(random.nextInt(0, palabrasDelNivel.size() - 1)));
+        }
     }
 
     public void setValoresDeNiveles() {
+        niveles = new ArrayList<Nivel>();
+
         for (int i = 0; i < 10; i++) {
             Nivel nivel = new Nivel(i);
 
             switch (i) {
 
                 case 0 -> {
-                    nivel.palabrasParaRecordar = 10;
+                    nivel.numPalabrasParaRecordar = 10;
                     nivel.porcentajeAciertos = 70;
                 }
                 case 1 -> {
-                    nivel.palabrasParaRecordar = 20;
+                    nivel.numPalabrasParaRecordar = 20;
                     nivel.porcentajeAciertos = 70;
                 }
                 case 2 -> {
-                    nivel.palabrasParaRecordar = 25;
+                    nivel.numPalabrasParaRecordar = 25;
                     nivel.porcentajeAciertos = 75;
                 }
                 case 3 -> {
-                    nivel.palabrasParaRecordar = 30;
+                    nivel.numPalabrasParaRecordar = 30;
                     nivel.porcentajeAciertos = 80;
                 }
                 case 4 -> {
-                    nivel.palabrasParaRecordar = 35;
+                    nivel.numPalabrasParaRecordar = 35;
                     nivel.porcentajeAciertos = 80;
                 }
                 case 5 -> {
-                    nivel.palabrasParaRecordar = 40;
+                    nivel.numPalabrasParaRecordar = 40;
                     nivel.porcentajeAciertos = 85;
                 }
                 case 6 -> {
-                    nivel.palabrasParaRecordar = 50;
+                    nivel.numPalabrasParaRecordar = 50;
                     nivel.porcentajeAciertos = 90;
                 }
                 case 7 -> {
-                    nivel.palabrasParaRecordar = 60;
+                    nivel.numPalabrasParaRecordar = 60;
                     nivel.porcentajeAciertos = 90;
                 }
                 case 8 -> {
-                    nivel.palabrasParaRecordar = 70;
+                    nivel.numPalabrasParaRecordar = 70;
                     nivel.porcentajeAciertos = 95;
                 }
                 case 9 -> {
-                    nivel.palabrasParaRecordar = 100;
+                    nivel.numPalabrasParaRecordar = 100;
                     nivel.porcentajeAciertos = 100;
                 }
                 default -> {
@@ -127,7 +168,7 @@ public class ModelIKnowThatWord {
                 }
             }
 
-            nivel.palabrasDelNivel = nivel.palabrasParaRecordar * 2;
+            nivel.numPalabrasDelNivel = nivel.numPalabrasParaRecordar * 2;
             niveles.add(nivel);
         }
     }
