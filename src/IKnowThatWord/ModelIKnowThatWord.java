@@ -1,6 +1,5 @@
 package IKnowThatWord;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -13,6 +12,7 @@ import java.util.Objects;
 public class ModelIKnowThatWord
 {
   private String nombre;
+	private int nivel;
 	private ArrayList <String> listaNombres;
 	private FileManager fileManager;
 
@@ -31,18 +31,32 @@ public class ModelIKnowThatWord
 	}
 
 	public void nuevoUsuario(){
-		fileManager.escribirTexto(nombre);
+		fileManager.escribirTexto(nombre+"0");
 	}
 
 	public boolean validarUsuario()
 	{
 		for(int i=0; i<listaNombres.size(); i++)
 		{
-			if(Objects.equals(nombre, listaNombres.get(i)))
+			String valida = new String();
+			for(int j=0; j<listaNombres.get(i).length()-1; j++)
 			{
+				valida += listaNombres.get(i).charAt(j);
+			}
+			if(Objects.equals(nombre, valida))
+			{
+				nivel = Character.getNumericValue(listaNombres.get(i).charAt(listaNombres.get(i).length()-1));
 				return true;
 			}
 		}
 		return false;
+	}
+
+	public int getNivel() {
+		return nivel;
+	}
+
+	public void setNivel(int nivel) {
+		this.nivel = nivel;
 	}
 }
