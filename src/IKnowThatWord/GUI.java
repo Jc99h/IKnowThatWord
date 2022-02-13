@@ -53,7 +53,12 @@ public class GUI extends JFrame {
         escucha = new Escucha();
 
         //Set up JComponents
-        modelIKnowThatWord.setNombre(JOptionPane.showInputDialog("Cual es tu nombre?"));
+        String nombreEntrada = JOptionPane.showInputDialog("Cual es tu nombre?");
+        if(nombreEntrada==null || "".equals(nombreEntrada))
+        {
+            System.exit(0);
+        }
+        modelIKnowThatWord.setNombre(nombreEntrada);
         if (modelIKnowThatWord.validarUsuario() == true) {
             if (modelIKnowThatWord.getNivelNum() != 0) {
                 JOptionPane.showMessageDialog(null, "El usuario " + modelIKnowThatWord.getNombre() + " ya existe\n" + "y el ultimo nivel aprobado fue el " + modelIKnowThatWord.getNivelNum());
