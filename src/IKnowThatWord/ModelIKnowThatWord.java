@@ -23,6 +23,7 @@ public class ModelIKnowThatWord {
 
     private String nombre;
     private int nivelNum;
+    public int palabrasCorrectas;
     public ArrayList<String> listaNombres, listaPalabras, palabrasParaRecordar, palabrasDelNivel;
     private Random random;
     private FileManager fileManager;
@@ -77,30 +78,48 @@ public class ModelIKnowThatWord {
         this.nivelNum = nivelNum;
     }
 
+    public boolean validarEleccion(int index, boolean respuesta) {
+        for (int i = 0; i < palabrasParaRecordar.size(); i++) {
+            if (palabrasDelNivel.get(index) == palabrasParaRecordar.get(i)) {
+                palabrasCorrectas++;
+                return respuesta;
+            }
+        }
+        return !respuesta;
+    }
+
     public void initNivel() {
+        listaPalabras = fileManager.lecturaFile("palabras");
+
         palabrasParaRecordar = new ArrayList<String>();
         palabrasDelNivel = new ArrayList<String>();
         Nivel nivelActual = niveles.get(nivelNum);
 
-        //setea las palabras del nivel de un arraylist (por ahora palabras temporales)
+        //setea las palabras del nivel de un arraylist
         for (int i = 0; i < nivelActual.numPalabrasDelNivel; i++) {
-            int numeroRandom = random.nextInt(0, listaPalabras.size()-1);
+            int numeroRandom = random.nextInt(0, listaPalabras.size() - 1);
             palabrasDelNivel.add(listaPalabras.get(numeroRandom));
             listaPalabras.remove(numeroRandom);
         }
 
+        //copiando el anterior array
+        ArrayList<String> palabrasDelNivelTemporal = new ArrayList<String>();
+        for (int i = 0; i < palabrasDelNivel.size(); i++) {
+            palabrasDelNivelTemporal.add(palabrasDelNivel.get(i));
+        }
+
         //de las palabras del nivel que saca antes sacar las palabras a recordar
         for (int i = 0; i < nivelActual.numPalabrasParaRecordar; i++) {
-            int numeroRandom = random.nextInt(0, palabrasDelNivel.size()-1);
-            palabrasParaRecordar.add(palabrasDelNivel.get(numeroRandom));
-            palabrasDelNivel.remove(numeroRandom);
+            int numeroRandom = random.nextInt(0, palabrasDelNivelTemporal.size() - 1);
+            palabrasParaRecordar.add(palabrasDelNivelTemporal.get(numeroRandom));
+            palabrasDelNivelTemporal.remove(numeroRandom);
         }
     }
 
     public void setValoresDeNiveles() {
         niveles = new ArrayList<Nivel>();
 
-        for (int i = 1; i < 10; i++) {
+        for (int i = 1; i < 11; i++) {
             Nivel nivel = new Nivel(i);
 
             switch (i) {
