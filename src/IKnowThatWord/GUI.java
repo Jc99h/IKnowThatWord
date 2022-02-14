@@ -12,6 +12,7 @@ import java.util.TimerTask;
  * This class is used for ...
  *
  * @author Camilo Ordoñez 1827625-2711 juan.ordonez.hurtado@correounivalle.edu.co
+ * @author Danny Andres Lopez 1941453-2711 danny.cardenas@gmail.edu.co
  * @version @version v.1.0.0 date:02/09/2021
  */
 public class GUI extends JFrame {
