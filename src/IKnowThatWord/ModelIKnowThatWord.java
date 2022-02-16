@@ -41,20 +41,35 @@ public class ModelIKnowThatWord {
 
     }
 
+    /**
+     * Retorna el nombre
+     * @return nombre
+     */
     public String getNombre() {
 
         return nombre;
     }
 
+    /**
+     * Cambia el nombre
+     * @param nombre
+     */
     public void setNombre(String nombre) {
 
         this.nombre = nombre;
     }
 
+    /**
+     * Ingresa un nuevo usuario
+     */
     public void nuevoUsuario() {
         fileManager.escribirTexto(nombre + "0", "nombres");
     }
 
+    /**
+     * Valida si un usuario ya existe
+     * @return boolean
+     */
     public boolean validarUsuario() {
         for (int i = 0; i < listaNombres.size(); i++) {
             String valida = new String();
@@ -69,11 +84,19 @@ public class ModelIKnowThatWord {
         return false;
     }
 
+    /**
+     * Retorna el nivel
+     * @return nivelNum
+     */
     public int getNivelNum() {
 
         return nivelNum;
     }
 
+    /**
+     * Cambia el nivel
+     * @param nivelNum
+     */
     public void setNivelNum(int nivelNum) {
 
         this.nivelNum = nivelNum;

@@ -17,7 +17,12 @@ import java.util.TimerTask;
  */
 public class GUI extends JFrame {
 
-    private static final String MENSAJE_INICIO = "Ayuda";
+    private static final String MENSAJE_INICIO = "Se te presentaran una secuencia de palabras de una en una, aparecera una palabra durante \n" +
+        "5 segundos en pantalla, luego desaparece y aparece la siguiente, debes memorizar las \n" +
+        "palabras que van apareciendo. Tras la serie de palabras a memorizar, se te presentara \n" +
+        "un listado con el doble de palabras que se mostraron y por cada palabra debes indicar \n" +
+        "si la palabras estaba o no contenida en el listado a memorizar y tendras 7 segundos\n" +
+        "para responder, en caso de no hacerlo se tomara como un error";
     private ModelIKnowThatWord modelIKnowThatWord;
     private Header headerProject;
     private JButton ayuda, salir, botonSi, botonNo;
@@ -133,7 +138,7 @@ public class GUI extends JFrame {
         this.add(palabras, constraints);
 
         botonSi = new JButton("Si");
-        //si.addActionListener(escucha);
+        botonSi.addActionListener(escucha);
         constraints.gridx = 0;
         constraints.gridy = 3;
         constraints.gridwidth = 2;
@@ -142,7 +147,7 @@ public class GUI extends JFrame {
         this.add(botonSi, constraints);
 
         botonNo = new JButton("No");
-        //no.addActionListener(escucha);
+        botonNo.addActionListener(escucha);
         constraints.gridx = 2;
         constraints.gridy = 3;
         constraints.gridwidth = 2;
@@ -165,6 +170,9 @@ public class GUI extends JFrame {
         mostrarPalabrasParaRecordar();
     }
 
+    /**
+     * Muestra en pantalla las palabras a recordar
+     */
     public void mostrarPalabrasParaRecordar() {
         modelIKnowThatWord.palabrasCorrectas = 0;
 
@@ -201,6 +209,9 @@ public class GUI extends JFrame {
         }, 0, fps);
     }
 
+    /**
+     * Muestra en pantalla todas las palabras del nivel
+     */
     public void mostrarTodasLasPalabras() {
         System.out.flush();
         int fps = 10;
@@ -226,7 +237,7 @@ public class GUI extends JFrame {
                             enJuego = false;
                             timer.cancel();
                         }
-
+                        palabras.setBackground(Color.WHITE);
                         palabras.setText(modelIKnowThatWord.palabrasDelNivel.get(numPalabra).toUpperCase(Locale.ROOT));
                         mensajes.setText(numPalabra + 1 + "");
                         mostrarPalabra = false;
@@ -249,12 +260,16 @@ public class GUI extends JFrame {
                         //aqui es donde se evalua si el jugador está en lo correcto o no
                         if (noRespondido) {
                             mensajes.setText("no ha respondido");
+                            palabras.setBackground(Color.RED);
                         } else {
                             boolean correcto = modelIKnowThatWord.validarEleccion(numPalabra, respuesta);
                             if (correcto) {
                                 mensajes.setText("correcto");
+                                modelIKnowThatWord.palabrasCorrectas++;
+                                palabras.setBackground(Color.GREEN);
                             } else {
                                 mensajes.setText("equivocado");
+                                palabras.setBackground(Color.RED);
                             }
                         }
 
