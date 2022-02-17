@@ -233,18 +233,26 @@ public class GUI extends JFrame {
 
                     //muestra la palabra si aun queda en la lista
                     if (mostrarPalabra && enJuego) {
-                        if (numPalabra >= modelIKnowThatWord.palabrasDelNivel.size() - 1) {
+                        if (numPalabra >= modelIKnowThatWord.palabrasDelNivel.size()) {
                             enJuego = false;
                             timer.cancel();
+                            JOptionPane.showMessageDialog(null, "Tu porcentaje fue: "+modelIKnowThatWord.getMostrarPorcentajeAciertos());
+                            if(modelIKnowThatWord.nuevoNivel()==true)
+                            {
+                                modelIKnowThatWord.initNivel();
+                                mostrarPalabrasParaRecordar();
+                            }
                         }
-                        palabras.setBackground(Color.WHITE);
-                        palabras.setText(modelIKnowThatWord.palabrasDelNivel.get(numPalabra).toUpperCase(Locale.ROOT));
-                        mensajes.setText(numPalabra + 1 + "");
-                        mostrarPalabra = false;
-                        respondido = false;
-                        miliseconds = 0;
-                        revalidate();
-                        repaint();
+                        if(enJuego==true) {
+                            palabras.setBackground(Color.WHITE);
+                            palabras.setText(modelIKnowThatWord.palabrasDelNivel.get(numPalabra).toUpperCase(Locale.ROOT));
+                            mensajes.setText(numPalabra + 1 + "\nPalabras correctas: "+modelIKnowThatWord.palabrasCorrectas);
+                            mostrarPalabra = false;
+                            respondido = false;
+                            miliseconds = 0;
+                            revalidate();
+                            repaint();
+                        }
 
                     }
 
@@ -265,7 +273,6 @@ public class GUI extends JFrame {
                             boolean correcto = modelIKnowThatWord.validarEleccion(numPalabra, respuesta);
                             if (correcto) {
                                 mensajes.setText("correcto");
-                                modelIKnowThatWord.palabrasCorrectas++;
                                 palabras.setBackground(Color.GREEN);
                             } else {
                                 mensajes.setText("equivocado");

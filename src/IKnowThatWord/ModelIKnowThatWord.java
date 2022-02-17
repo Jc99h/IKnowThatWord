@@ -28,6 +28,7 @@ public class ModelIKnowThatWord {
     public ArrayList<String> listaNombres, listaPalabras, palabrasParaRecordar, palabrasDelNivel;
     private Random random;
     private FileManager fileManager;
+    private int mostrarPorcentajeAciertos;
 
     public ArrayList<Nivel> niveles;
 
@@ -36,6 +37,7 @@ public class ModelIKnowThatWord {
         listaNombres = fileManager.lecturaFile("nombres");
         listaPalabras = fileManager.lecturaFile("palabras");
         random = new Random();
+        palabrasCorrectas = 0;
 
         setValoresDeNiveles();
 
@@ -104,7 +106,7 @@ public class ModelIKnowThatWord {
 
     public boolean validarEleccion(int index, boolean respuesta) {
         for (int i = 0; i < palabrasParaRecordar.size(); i++) {
-            if (palabrasDelNivel.get(index) == palabrasParaRecordar.get(i)) {
+            if (Objects.equals(palabrasDelNivel.get(index), palabrasParaRecordar.get(i))) {
                 palabrasCorrectas++;
                 return respuesta;
             }
@@ -196,5 +198,24 @@ public class ModelIKnowThatWord {
             nivel.numPalabrasDelNivel = nivel.numPalabrasParaRecordar * 2;
             niveles.add(nivel);
         }
+    }
+
+    public boolean nuevoNivel()
+    {
+        mostrarPorcentajeAciertos = palabrasCorrectas * 100 / niveles.get(nivelNum).numPalabrasParaRecordar;
+        if(mostrarPorcentajeAciertos>=niveles.get(nivelNum).porcentajeAciertos)
+        {
+            nivelNum++;
+            return true;
+        }
+        return false;
+    }
+
+    public int getMostrarPorcentajeAciertos() {
+        return mostrarPorcentajeAciertos;
+    }
+
+    public void setMostrarPorcentajeAciertos(int mostrarPorcentajeAciertos) {
+        this.mostrarPorcentajeAciertos = mostrarPorcentajeAciertos;
     }
 }
