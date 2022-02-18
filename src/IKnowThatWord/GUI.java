@@ -18,18 +18,18 @@ import java.util.TimerTask;
 public class GUI extends JFrame {
 
     private static final String MENSAJE_INICIO = "Se te presentaran una secuencia de palabras de una en una, aparecera una palabra durante \n" +
-        "5 segundos en pantalla, luego desaparece y aparece la siguiente, debes memorizar las \n" +
-        "palabras que van apareciendo. Tras la serie de palabras a memorizar, se te presentara \n" +
-        "un listado con el doble de palabras que se mostraron y por cada palabra debes indicar \n" +
-        "si la palabras estaba o no contenida en el listado a memorizar y tendras 7 segundos\n" +
-        "para responder, en caso de no hacerlo se tomara como un error";
+            "5 segundos en pantalla, luego desaparece y aparece la siguiente, debes memorizar las \n" +
+            "palabras que van apareciendo. Tras la serie de palabras a memorizar, se te presentara \n" +
+            "un listado con el doble de palabras que se mostraron y por cada palabra debes indicar \n" +
+            "si la palabras estaba o no contenida en el listado a memorizar y tendras 7 segundos\n" +
+            "para responder, en caso de no hacerlo se tomara como un error";
     private ModelIKnowThatWord modelIKnowThatWord;
     private Header headerProject;
     private JButton ayuda, salir, botonSi, botonNo;
     private JTextArea nombrePersona, nivel, mensajes;
     private JTextField palabras;
     private Escucha escucha;
-    public boolean mostrarPalabra, respondido, respuesta, enJuego, noRespondido;
+    public boolean mostrarPalabra, respondido, respuesta, enJuego, noRespondido, validandoPuntaje;
 
     /**
      * Constructor of GUI class
@@ -189,18 +189,19 @@ public class GUI extends JFrame {
                     palabras.setText(contador + "");
                     contador--;
 
-                } else if (miliseconds == 5000 + (fps * 1 * (numPalabra))) {
+                } else if (miliseconds == 5000 + (fps * 2 * (numPalabra))) {
+                    if (numPalabra >= modelIKnowThatWord.palabrasParaRecordar.size()) {
+                        enJuego = false;
+                        mostrarTodasLasPalabras();
+                        timer.cancel();
+                        return;
+                    }
+
                     palabras.setText(modelIKnowThatWord.palabrasParaRecordar.get(numPalabra).toUpperCase(Locale.ROOT));
                     mensajes.setText(numPalabra + 1 + "");
                     revalidate();
                     repaint();
                     numPalabra++;
-
-                    if (numPalabra >= modelIKnowThatWord.palabrasParaRecordar.size()) {
-                        enJuego = false;
-                        mostrarTodasLasPalabras();
-                        timer.cancel();
-                    }
                 }
                 System.out.println(miliseconds);
                 miliseconds += fps;
@@ -214,7 +215,7 @@ public class GUI extends JFrame {
      */
     public void mostrarTodasLasPalabras() {
         System.out.flush();
-        int fps = 10;
+        int fps = 1000;
         java.util.Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             int miliseconds = fps;
@@ -222,50 +223,50 @@ public class GUI extends JFrame {
 
             @Override
             public void run() {
-                if (miliseconds % 1000 == 0) {
-                    if (miliseconds <= 3000 && !enJuego) {
-                        palabras.setText("comienza el juego".toUpperCase(Locale.ROOT));
-                    } else if (!enJuego) {
-                        enJuego = true;
-                        mostrarPalabra = true;
-                        miliseconds = 0;
-                    }
+                if (miliseconds <= 3000 && !enJuego) {
+                    palabras.setText("comienza el juego".toUpperCase(Locale.ROOT));
+                } else if (!enJuego) {
+                    enJuego = true;
+                    mostrarPalabra = true;
+                    miliseconds = 0;
+                }
 
-                    //muestra la palabra si aun queda en la lista
-                    if (mostrarPalabra && enJuego) {
-                        if (numPalabra >= modelIKnowThatWord.palabrasDelNivel.size()) {
-                            enJuego = false;
-                            timer.cancel();
-                            JOptionPane.showMessageDialog(null, "Tu porcentaje fue: "+modelIKnowThatWord.getMostrarPorcentajeAciertos());
-                            if(modelIKnowThatWord.nuevoNivel()==true)
-                            {
-                                modelIKnowThatWord.initNivel();
-                                mostrarPalabrasParaRecordar();
-                            }
+                //muestra la palabra si aun queda en la lista
+                if (mostrarPalabra && enJuego) {
+                    if (numPalabra >= modelIKnowThatWord.palabrasDelNivel.size()) {
+                        enJuego = false;
+                        JOptionPane.showMessageDialog(null, "Tu porcentaje fue: " + modelIKnowThatWord.getMostrarPorcentajeAciertos());
+                        if (modelIKnowThatWord.nuevoNivel()) {
+                            modelIKnowThatWord.initNivel();
+                            mostrarPalabrasParaRecordar();
                         }
-                        if(enJuego==true) {
-                            palabras.setBackground(Color.WHITE);
-                            palabras.setText(modelIKnowThatWord.palabrasDelNivel.get(numPalabra).toUpperCase(Locale.ROOT));
-                            mensajes.setText(numPalabra + 1 + "\nPalabras correctas: "+modelIKnowThatWord.palabrasCorrectas);
-                            mostrarPalabra = false;
-                            respondido = false;
-                            miliseconds = 0;
-                            revalidate();
-                            repaint();
-                        }
-
+                        timer.cancel();
+                        return;
+                    }
+                    if (enJuego) {
+                        palabras.setBackground(Color.WHITE);
+                        palabras.setText(modelIKnowThatWord.palabrasDelNivel.get(numPalabra).toUpperCase(Locale.ROOT));
+                        mensajes.setText(numPalabra + 1 + "\nPalabras correctas: " + modelIKnowThatWord.palabrasCorrectas);
+                        mostrarPalabra = false;
+                        respondido = false;
+                        miliseconds = 1000;
+                        revalidate();
+                        repaint();
                     }
 
-                    //valida si ya paso el tiempo para responder
-                    if (miliseconds >= 7000 && !respondido && enJuego) {
-                        noRespondido = true;
-                        miliseconds = 0;
-                    }
+                }
 
-                    System.out.println("respondido " + respondido + " respuesta " + respuesta);
-                    //valida la respuesta y da paso a la siguiente palabra
-                    if (noRespondido || (respondido && enJuego)) {
-                        //aqui es donde se evalua si el jugador está en lo correcto o no
+                //valida si ya paso el tiempo para responder
+                if (miliseconds >= 7000 && !respondido && enJuego) {
+                    noRespondido = true;
+                    validandoPuntaje = true;
+                    miliseconds = 1000;
+                }
+
+                //valida la respuesta y da paso a la siguiente palabra
+                if (noRespondido || (respondido && enJuego)) {
+                    //aqui es donde se evalua si el jugador está en lo correcto o no
+                    if (validandoPuntaje) {
                         if (noRespondido) {
                             mensajes.setText("no ha respondido");
                             palabras.setBackground(Color.RED);
@@ -279,18 +280,18 @@ public class GUI extends JFrame {
                                 palabras.setBackground(Color.RED);
                             }
                         }
-
-                        if (miliseconds >= 3000) {
-                            numPalabra++;
-                            respondido = false;
-                            noRespondido = false;
-                            mostrarPalabra = true;
-                        }
+                        validandoPuntaje = false;
                     }
 
-                    System.out.println(miliseconds);
-                    System.out.println("palabra numero " + numPalabra);
+                    if (miliseconds >= 3000) {
+                        numPalabra++;
+                        respondido = false;
+                        noRespondido = false;
+                        mostrarPalabra = true;
+                    }
                 }
+
+                System.out.println(miliseconds);
                 miliseconds += fps;
             }
 
@@ -324,9 +325,11 @@ public class GUI extends JFrame {
             }
 
             if (objectEvent.getSource() == botonSi) {
+                validandoPuntaje = true;
                 respondido = true;
                 respuesta = true;
             } else if (objectEvent.getSource() == botonNo) {
+                validandoPuntaje = true;
                 respondido = true;
                 respuesta = false;
             }

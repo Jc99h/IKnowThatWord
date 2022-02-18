@@ -45,6 +45,7 @@ public class ModelIKnowThatWord {
 
     /**
      * Retorna el nombre
+     *
      * @return nombre
      */
     public String getNombre() {
@@ -54,6 +55,7 @@ public class ModelIKnowThatWord {
 
     /**
      * Cambia el nombre
+     *
      * @param nombre
      */
     public void setNombre(String nombre) {
@@ -70,6 +72,7 @@ public class ModelIKnowThatWord {
 
     /**
      * Valida si un usuario ya existe
+     *
      * @return boolean
      */
     public boolean validarUsuario() {
@@ -88,6 +91,7 @@ public class ModelIKnowThatWord {
 
     /**
      * Retorna el nivel
+     *
      * @return nivelNum
      */
     public int getNivelNum() {
@@ -97,6 +101,7 @@ public class ModelIKnowThatWord {
 
     /**
      * Cambia el nivel
+     *
      * @param nivelNum
      */
     public void setNivelNum(int nivelNum) {
@@ -106,7 +111,7 @@ public class ModelIKnowThatWord {
 
     public boolean validarEleccion(int index, boolean respuesta) {
         for (int i = 0; i < palabrasParaRecordar.size(); i++) {
-            if (Objects.equals(palabrasDelNivel.get(index), palabrasParaRecordar.get(i))) {
+            if (palabrasDelNivel.get(index).equals(palabrasParaRecordar.get(i))) {
                 palabrasCorrectas++;
                 return respuesta;
             }
@@ -115,6 +120,7 @@ public class ModelIKnowThatWord {
     }
 
     public void initNivel() {
+        palabrasCorrectas = 0;
         listaPalabras = fileManager.lecturaFile("palabras");
 
         palabrasParaRecordar = new ArrayList<String>();
@@ -200,11 +206,9 @@ public class ModelIKnowThatWord {
         }
     }
 
-    public boolean nuevoNivel()
-    {
+    public boolean nuevoNivel() {
         mostrarPorcentajeAciertos = palabrasCorrectas * 100 / niveles.get(nivelNum).numPalabrasParaRecordar;
-        if(mostrarPorcentajeAciertos>=niveles.get(nivelNum).porcentajeAciertos)
-        {
+        if (mostrarPorcentajeAciertos >= niveles.get(nivelNum).porcentajeAciertos) {
             nivelNum++;
             return true;
         }
