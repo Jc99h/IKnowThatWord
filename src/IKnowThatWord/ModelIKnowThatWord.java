@@ -111,7 +111,7 @@ public class ModelIKnowThatWord {
 
     public boolean validarEleccion(int index, boolean respuesta) {
         for (int i = 0; i < palabrasParaRecordar.size(); i++) {
-            if (palabrasDelNivel.get(index).equals(palabrasParaRecordar.get(i))) {
+            if (palabrasDelNivel.get(index) == palabrasParaRecordar.get(i)) {
                 palabrasCorrectas++;
                 return respuesta;
             }
