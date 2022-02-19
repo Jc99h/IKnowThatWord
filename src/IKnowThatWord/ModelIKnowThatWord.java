@@ -204,11 +204,11 @@ public class ModelIKnowThatWord {
             switch (i) {
 
                 case 1 -> {
-                    nivel.numPalabrasParaRecordar = 20;
+                    nivel.numPalabrasParaRecordar = 10;
                     nivel.porcentajeAciertos = 70;
                 }
                 case 2 -> {
-                    nivel.numPalabrasParaRecordar = 40;
+                    nivel.numPalabrasParaRecordar = 20;
                     nivel.porcentajeAciertos = 70;
                 }
                 case 3 -> {
