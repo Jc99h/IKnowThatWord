@@ -174,6 +174,8 @@ public class GUI extends JFrame {
      * Muestra en pantalla las palabras a recordar
      */
     public void mostrarPalabrasParaRecordar() {
+        botonSi.removeActionListener(escucha);
+        botonNo.removeActionListener(escucha);
         modelIKnowThatWord.palabrasCorrectas = 0;
 
         int fps = 1000;
@@ -214,6 +216,8 @@ public class GUI extends JFrame {
      * Muestra en pantalla todas las palabras del nivel
      */
     public void mostrarTodasLasPalabras() {
+        botonSi.addActionListener(escucha);
+        botonNo.addActionListener(escucha);
         System.out.flush();
         int fps = 1000;
         java.util.Timer timer = new Timer();
