@@ -235,6 +235,7 @@ public class GUI extends JFrame {
                 if (mostrarPalabra && enJuego) {
                     if (numPalabra >= modelIKnowThatWord.palabrasDelNivel.size()) {
                         enJuego = false;
+                        palabras.setBackground(Color.WHITE);
                         JOptionPane.showMessageDialog(null, "Tu porcentaje fue: " + modelIKnowThatWord.getMostrarPorcentajeAciertos());
                         if (modelIKnowThatWord.nuevoNivel()) {
                             modelIKnowThatWord.initNivel();
@@ -243,24 +244,21 @@ public class GUI extends JFrame {
                         timer.cancel();
                         return;
                     }
-                    if (enJuego) {
-                        palabras.setBackground(Color.WHITE);
-                        palabras.setText(modelIKnowThatWord.palabrasDelNivel.get(numPalabra).toUpperCase(Locale.ROOT));
-                        mensajes.setText(numPalabra + 1 + "\nPalabras correctas: " + modelIKnowThatWord.palabrasCorrectas);
-                        mostrarPalabra = false;
-                        respondido = false;
-                        miliseconds = 1000;
-                        revalidate();
-                        repaint();
-                    }
-
+                    palabras.setBackground(Color.WHITE);
+                    palabras.setText(modelIKnowThatWord.palabrasDelNivel.get(numPalabra).toUpperCase(Locale.ROOT));
+                    mensajes.setText(numPalabra + 1 + "\nPalabras correctas: " + modelIKnowThatWord.palabrasCorrectas);
+                    mostrarPalabra = false;
+                    respondido = false;
+                    miliseconds = 0;
+                    revalidate();
+                    repaint();
                 }
 
                 //valida si ya paso el tiempo para responder
                 if (miliseconds >= 7000 && !respondido && enJuego) {
                     noRespondido = true;
                     validandoPuntaje = true;
-                    miliseconds = 1000;
+                    miliseconds = 0;
                 }
 
                 //valida la respuesta y da paso a la siguiente palabra
@@ -324,14 +322,16 @@ public class GUI extends JFrame {
                 System.exit(0);
             }
 
-            if (objectEvent.getSource() == botonSi) {
-                validandoPuntaje = true;
-                respondido = true;
-                respuesta = true;
-            } else if (objectEvent.getSource() == botonNo) {
-                validandoPuntaje = true;
-                respondido = true;
-                respuesta = false;
+            if (!respondido) {
+                if (objectEvent.getSource() == botonSi) {
+                    validandoPuntaje = true;
+                    respondido = true;
+                    respuesta = true;
+                } else if (objectEvent.getSource() == botonNo) {
+                    validandoPuntaje = true;
+                    respondido = true;
+                    respuesta = false;
+                }
             }
 
             revalidate();
