@@ -178,7 +178,7 @@ public class GUI extends JFrame {
     public void mostrarPalabrasParaRecordar() {
         botonSi.removeActionListener(escucha);
         botonNo.removeActionListener(escucha);
-        modelIKnowThatWord.palabrasCorrectas = 0;
+        modelIKnowThatWord.aciertos = 0;
 
         int fps = 1000;
         java.util.Timer timer = new Timer();
@@ -209,6 +209,8 @@ public class GUI extends JFrame {
                 }
                 System.out.println(miliseconds);
                 miliseconds += fps;
+                revalidate();
+                repaint();
             }
 
         }, 0, fps);
@@ -242,9 +244,19 @@ public class GUI extends JFrame {
                     if (numPalabra >= modelIKnowThatWord.palabrasDelNivel.size()) {
                         enJuego = false;
                         palabras.setBackground(Color.WHITE);
+                        modelIKnowThatWord.setMostrarPorcentajeAciertos(modelIKnowThatWord.getAciertos() * 100 / modelIKnowThatWord.palabrasDelNivel.size());
                         boolean pasaDeNivel = modelIKnowThatWord.nuevoNivel();
-                        JOptionPane.showMessageDialog(null, "Tu porcentaje fue: " + modelIKnowThatWord.getMostrarPorcentajeAciertos());
                         if (pasaDeNivel) {
+                            JOptionPane.showMessageDialog(null, "Tu porcentaje fue: " + modelIKnowThatWord.getMostrarPorcentajeAciertos() + "\nPasas de nivel");
+                            nivel.setText(modelIKnowThatWord.getNivelNum()+1+"");
+                            modelIKnowThatWord.subirNivelUsuario(modelIKnowThatWord.getNivelNum());
+                            modelIKnowThatWord.actualizarUsuarios();
+                            modelIKnowThatWord.initNivel();
+                            mostrarPalabrasParaRecordar();
+                        }
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null, "Tu porcentaje fue: " + modelIKnowThatWord.getMostrarPorcentajeAciertos() + "\nNo pasas de nivel");
                             modelIKnowThatWord.initNivel();
                             mostrarPalabrasParaRecordar();
                         }
@@ -254,7 +266,7 @@ public class GUI extends JFrame {
 
                     palabras.setBackground(Color.WHITE);
                     palabras.setText(modelIKnowThatWord.palabrasDelNivel.get(numPalabra).toUpperCase(Locale.ROOT));
-                    mensajes.setText(numPalabra + 1 + "\nPalabras correctas: " + modelIKnowThatWord.palabrasCorrectas);
+                    mensajes.setText(numPalabra + 1 + "\nPalabras correctas: " + modelIKnowThatWord.aciertos);
                     mostrarPalabra = false;
                     respondido = false;
                     miliseconds = 0;
@@ -301,6 +313,8 @@ public class GUI extends JFrame {
                 }
                 System.out.println(miliseconds);
                 miliseconds += fps;
+                revalidate();
+                repaint();
             }
 
         }, 0, fps);
@@ -312,7 +326,7 @@ public class GUI extends JFrame {
      * @param args Object used in order to send input data from command line when
      *             the program is execute by console.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args){
         EventQueue.invokeLater(() -> {
             GUI miProjectGUI = new GUI();
         });
@@ -341,9 +355,6 @@ public class GUI extends JFrame {
                 respondido = true;
                 respuesta = false;
             }
-
-            revalidate();
-            repaint();
         }
     }
 }

@@ -52,9 +52,9 @@ public class FileManager {
         return palabras;
     }
 
-    public void escribirTexto(String linea, String cualArchivo) {
+    public void escribirTexto(String linea, String cualArchivo, boolean nuevoUsuario) {
         try {
-            fileWriter = new FileWriter("src/IKnowThatWord/files/" + cualArchivo + ".txt", true);
+            fileWriter = new FileWriter("src/IKnowThatWord/files/" + cualArchivo + ".txt", nuevoUsuario);
             output = new BufferedWriter(fileWriter);
             output.write(linea);
             output.newLine();
