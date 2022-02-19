@@ -1,5 +1,7 @@
 package IKnowThatWord;
 
+import com.sun.source.tree.ContinueTree;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -240,14 +242,16 @@ public class GUI extends JFrame {
                     if (numPalabra >= modelIKnowThatWord.palabrasDelNivel.size()) {
                         enJuego = false;
                         palabras.setBackground(Color.WHITE);
+                        boolean pasaDeNivel = modelIKnowThatWord.nuevoNivel();
                         JOptionPane.showMessageDialog(null, "Tu porcentaje fue: " + modelIKnowThatWord.getMostrarPorcentajeAciertos());
-                        if (modelIKnowThatWord.nuevoNivel()) {
+                        if (pasaDeNivel) {
                             modelIKnowThatWord.initNivel();
                             mostrarPalabrasParaRecordar();
                         }
                         timer.cancel();
                         return;
                     }
+
                     palabras.setBackground(Color.WHITE);
                     palabras.setText(modelIKnowThatWord.palabrasDelNivel.get(numPalabra).toUpperCase(Locale.ROOT));
                     mensajes.setText(numPalabra + 1 + "\nPalabras correctas: " + modelIKnowThatWord.palabrasCorrectas);
@@ -258,41 +262,43 @@ public class GUI extends JFrame {
                     repaint();
                 }
 
-                //valida si ya paso el tiempo para responder
-                if (miliseconds >= 7000 && !respondido && enJuego) {
-                    noRespondido = true;
-                    validandoPuntaje = true;
-                    miliseconds = 0;
-                }
+                if (miliseconds >= 3000) {
 
-                //valida la respuesta y da paso a la siguiente palabra
-                if (noRespondido || (respondido && enJuego)) {
-                    //aqui es donde se evalua si el jugador está en lo correcto o no
-                    if (validandoPuntaje) {
-                        if (noRespondido) {
-                            mensajes.setText("no ha respondido");
-                            palabras.setBackground(Color.RED);
-                        } else {
-                            boolean correcto = modelIKnowThatWord.validarEleccion(numPalabra, respuesta);
-                            if (correcto) {
-                                mensajes.setText("correcto");
-                                palabras.setBackground(Color.GREEN);
-                            } else {
-                                mensajes.setText("equivocado");
+                    //valida si ya paso el tiempo para responder
+                    if (miliseconds >= 7000 && !respondido && enJuego) {
+                        noRespondido = true;
+                        validandoPuntaje = true;
+                        miliseconds = 0;
+                    }
+
+                    //valida la respuesta y da paso a la siguiente palabra
+                    if (noRespondido || (respondido && enJuego)) {
+                        //aqui es donde se evalua si el jugador está en lo correcto o no
+                        if (validandoPuntaje) {
+                            if (noRespondido) {
+                                mensajes.setText("no ha respondido");
                                 palabras.setBackground(Color.RED);
+                            } else {
+                                boolean correcto = modelIKnowThatWord.validarEleccion(numPalabra, respuesta);
+                                if (correcto) {
+                                    mensajes.setText("correcto");
+                                    palabras.setBackground(Color.GREEN);
+                                } else {
+                                    mensajes.setText("equivocado");
+                                    palabras.setBackground(Color.RED);
+                                }
                             }
+                            validandoPuntaje = false;
                         }
-                        validandoPuntaje = false;
-                    }
 
-                    if (miliseconds >= 3000) {
-                        numPalabra++;
-                        respondido = false;
-                        noRespondido = false;
-                        mostrarPalabra = true;
+                        if (miliseconds >= 3000) {
+                            numPalabra++;
+                            respondido = false;
+                            noRespondido = false;
+                            mostrarPalabra = true;
+                        }
                     }
                 }
-
                 System.out.println(miliseconds);
                 miliseconds += fps;
             }
@@ -326,16 +332,14 @@ public class GUI extends JFrame {
                 System.exit(0);
             }
 
-            if (!respondido) {
-                if (objectEvent.getSource() == botonSi) {
-                    validandoPuntaje = true;
-                    respondido = true;
-                    respuesta = true;
-                } else if (objectEvent.getSource() == botonNo) {
-                    validandoPuntaje = true;
-                    respondido = true;
-                    respuesta = false;
-                }
+            if (objectEvent.getSource() == botonSi && !respondido) {
+                validandoPuntaje = true;
+                respondido = true;
+                respuesta = true;
+            } else if (objectEvent.getSource() == botonNo && !respondido) {
+                validandoPuntaje = true;
+                respondido = true;
+                respuesta = false;
             }
 
             revalidate();
